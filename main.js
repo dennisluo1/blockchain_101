@@ -39,11 +39,33 @@ class Blockchain {
         newBlock.hash = newBlock.calculateHash(); // update hash
         this.chain.push(newBlock); // push new block to chain 
     }
+    //verify integrity of blockchain
+    isChainValid() {
+        for(let i = 1; i < this.chain.length; i++) { //i should be set to 1, genesis block set to 0
+            const currentBlock = this.chain[i];
+            const previousBlock = this.chain[i - i];
+
+            if(currentBlock.hash !== currentBlock.calculateHash()){ //check if currentBlock is not equal to current block
+                return false;
+            }
+
+            if(currentBlock.previous !== previousBlock.hash) { //check if currentBlock points to current previous block
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
 
 //test chain
 let commonCoin = new Blockchain();
 commonCoin.addBlock(new Block(1, "03/12/2017", { amount: 4 }));
 commonCoin.addBlock(new Block(2, "05/12/2017", { amount: 10 }));
+// console.log(JSON.stringify(commonCoin, null, 4))
 
-console.log(JSON.stringify(commonCoin, null, 4))
+//check to determine integrity of blockchain
+console.log('Is blockchain valid? ' + commonCoin.isChainValid());
+
+
+
