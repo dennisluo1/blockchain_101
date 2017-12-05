@@ -1,3 +1,5 @@
+const SHA256 = require('crypto-js/sha256');
+
 class Block {
     //index informs us where block sits on chain 
     //timestamp informs us when block was created
@@ -8,10 +10,10 @@ class Block {
         this.timestamp = timestamp;
         this.data = data;
         this.previousHash = previousHash;
-        this.hash = ''; //contains hash of block, will need a way to calculate
+        this.hash = this.calculateHash(); //contains hash of block, will need a way to calculate
     }
 
     calculateHash() {
-
+        return SHA256(this.index + this.previousHash + this.timestamp + JSON.stringify(this.data)).toString();
     }
 }
