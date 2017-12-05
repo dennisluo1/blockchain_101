@@ -17,3 +17,33 @@ class Block {
         return SHA256(this.index + this.previousHash + this.timestamp + JSON.stringify(this.data)).toString();
     }
 }
+
+class Blockchain {
+    //constructor is responsible for initializing chain
+    constructor() {
+        //initialize chain, to contain genesis block
+        this.chain = [this.createGenesisBlock()];
+    }
+    //first block
+    createGenesisBlock() {
+        return new Block(0, "01/01/2017", "Genesis block", "0");
+    }
+    //get the most recent block
+    getLatestBlock() { 
+        return this.chain[this.chain.length - 1];
+    }
+    //add a new block
+    addBlock(newBlock) {
+        //set previous hash to new block, get latest block
+        newBlock.previousHash = this.getLatestBlock().hash;
+        newBlock.hash = newBlock.calculateHash(); // update hash
+        this.chain.push(newBlock); // push new block to chain 
+    }
+}
+
+//test chain
+let commonCoin = new Blockchain();
+commonCoin.addBlock(new Block(1, "03/12/2017", { amount: 4 }));
+commonCoin.addBlock(new Block(2, "05/12/2017", { amount: 10 }));
+
+console.log(JSON.stringify(commonCoin, null, 4))
